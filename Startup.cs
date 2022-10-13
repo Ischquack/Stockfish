@@ -9,10 +9,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Oblig1.DAL;
-using Oblig1.Model;
+using Stockfish.DAL;
+using Stockfish.Model;
 
-namespace Oblig1
+namespace Stockfish
 {
     public class Startup
     {

@@ -1,4 +1,4 @@
-namespace Oblig1
+namespace Stockfish
 {
     public class Program
     {
