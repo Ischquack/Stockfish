@@ -1,7 +1,7 @@
 ﻿$(() => {
-    getAllStocks();    
-    $("#mySite").click(() => window.location.href = "mySite.html");
-    $("#myStocks").click(() => window.location.href = "myStocks.html");
+    getAllStocks();
+    $("#register").click(() => window.location.href = "register.html");
+    $("#login").click(() => window.location.href = "index.html");
 });
 
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
@@ -14,7 +14,6 @@ const formatStocks = stockList => {
         '<th>+/-%</th>' +
         '<th>Price</th>' +
         '<th>Turnover</th>' +
-        '<th>Quantity</th>' +
         '</tr>';
 
     for (let stock of stockList) {
@@ -25,8 +24,7 @@ const formatStocks = stockList => {
             '<td>' + stock.diffPer + '</td>' +
             '<td>' + stock.price + '</td>' +
             '<td>' + stock.turnover + '</td>' +
-            '<td> <input type="text" id="quantity' + stock.id + '"> </td>' +
-            '<td> <button id="buy' + stock.id + '"> </td>' +
+
             '</tr>';
     }
     stockTable += '</table>';
