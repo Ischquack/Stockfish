@@ -7,9 +7,10 @@ namespace Stockfish.Model
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
-
-        public string PostCode { get; set; }
-        public string PostArea { get; set; }
+        public string PostalCode { get; set; }
+        public string PostalOffice { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }
 

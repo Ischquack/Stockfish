@@ -16,8 +16,8 @@ namespace Stockfish.Model
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
 
-                var norwegian = new Stock { Name = "Norwegian", Price = 1000, Value = 100000 };
-                var orkla = new Stock { Name = "Orkla", Price = 145, Value = 3000 };
+                var norwegian = new Stock { Name = "Norwegian", Price = 1000, Turnover = 100000 };
+                var orkla = new Stock { Name = "Orkla", Price = 145, Turnover = 3000 };
 
                 context.Stocks.Add(norwegian);
                 context.Stocks.Add(orkla);

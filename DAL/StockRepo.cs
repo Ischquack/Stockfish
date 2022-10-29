@@ -25,7 +25,9 @@ namespace Stockfish.DAL
                     Id = s.Id,
                     Name = s.Name,
                     Price = s.Price,
-                    Value = s.Value
+                    Turnover = s.Turnover,
+                    Diff = s.Diff,
+                    DiffPer = s.DiffPer
                 }).ToListAsync();
                 return allStocks;
             }

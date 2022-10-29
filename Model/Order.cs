@@ -7,9 +7,9 @@ namespace Stockfish.Model
     {
         public int Id { get; set; }
         public string Date { get; set; }
+        public int Quantity { get; set; }
 
         public virtual User User { get; set; }
-        public virtual List<OrderLine> OrderLines { get; set; }
     }
 }
 
