@@ -6,32 +6,38 @@ using Stockfish.Model;
 
 namespace Stockfish.DAL
 {
+    
     public class Users
     {
         public int Id { get; set; }
         public string Firstname { get; set; }
         public string Surname { get; set; }
         public string Address { get; set; }
-        virtual public PostAreas PostArea { get; set; }
+        virtual public PostOffices PostOffice { get; set; }
+        public string Username { get; set; }
+        public byte[] Password { get; set; }
+        public byte[] Salt { get; set; }
     }
 
-    public class PostAreas
+    public class PostOffices
     {
         [Key]
         [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(DatabaseGeneratedOption.None)]
-        public string PostCode { get; set; }
-        public string PostArea { get; set; }
+        public string PostalCode { get; set; }
+        public string PostalOffice { get; set; }
     }
+
 
     public class StockContext : DbContext
     {
         public StockContext(DbContextOptions<StockContext> options) : base(options)
         {
+            Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
         public DbSet<Users> Users { get; set; }
-        public DbSet<PostAreas> PostAreas { get; set; }
+        public DbSet<PostOffices> PostOffices { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Order> Orders { get; set; }
 

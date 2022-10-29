@@ -95,9 +95,9 @@ const validateUsername = () => {
 }
 
 const validatePassword = () => {
-    const passord = $("#inPasseord").val();
+    const password = $("#inPassword").val();
     const regexp = /^(?=.*[0-9])(?=.*[A-Za-zÆØÅæøå])[0-9a-zA-ZæøåÆØÅ. \-]{6,}$/;
-    const ok = regexp.test((passord));
+    const ok = regexp.test((password));
     if (!ok) {
         $("#wrongPassword").html("Must be at least 6 characters and include at least one letter and one number")
         return false;
@@ -106,10 +106,6 @@ const validatePassword = () => {
         $("#wrongPassword").html("");
         return true;
     }
-}
-
-const brukernavnOgPassordOk = () => {
-    return (validerBrukernavn() && validerPassord());
 }
 
 export { noValidationIssues }

@@ -14,15 +14,51 @@ namespace Stockfish.Controllers
     public class StockController : ControllerBase
     {
         private readonly IStockRepo _db;
+        private ILogger<StockController> _log;
+        private const string _loggedIn = "loggedIn";
 
-        public StockController(IStockRepo db)
+
+        public StockController(IStockRepo db, ILogger<StockController> log)
         {
             _db = db;
+            _log = log;
         }
 
-        public async Task<List<Stock>> GetAllStocks()
+        public async Task<ActionResult> GetAllStocks()
         {
-            return await _db.GetAllStocks();
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
+            {
+                return Unauthorized();
+            }
+            List<Stock> allStocks = await _db.GetAllStocks();
+            return Ok(allStocks);
+        }
+
+        public async Task<ActionResult> RegisterUser(User user)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
+            {
+                return Unauthorized();
+            }
+            if (await _db.CheckUsername(user))
+            {
+                if (await _db.RegisterUser(user))
+                {
+                    return Ok("User registered, you can now log in");
+                } else
+                {
+                    return BadRequest("Oops, something went wrong! Please try again later");
+                }
+                
+            } else
+            {
+                return BadRequest("Username already taken, please choose a different username");
+            }
+        }
+
+        public async Task<ActionResult> Login(string username, string password)
+        {
+            await _db.Login(username, password);
         }
     }
 }

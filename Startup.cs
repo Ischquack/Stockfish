@@ -28,18 +28,28 @@ namespace Stockfish
             services.AddDbContext<StockContext>(options =>
                             options.UseSqlite("Data Source=Stocks.db"));
             services.AddScoped<IStockRepo, StockRepo>();
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = ".AdventureWorks.Session";
+                options.IdleTimeout = TimeSpan.FromSeconds(3600);
+                options.Cookie.IsEssential = true;
+            });
+            services.AddDistributedMemoryCache();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                loggerFactory.AddFile("Logs/StockfishLog.txt")
                 DBInit.init(app);
             }
 
             app.UseRouting();
+
+            app.UseSession();
 
             app.UseStaticFiles();
 

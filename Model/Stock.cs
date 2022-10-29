@@ -8,7 +8,14 @@ namespace Stockfish.Model
         public double Price { get; set; }
         public double Turnover { get; set; }
         public double Diff { get; set; }
-        public double DiffPer { get; set; }
+
+        public Stock (string name, double price, double turnover, double diff)
+        {
+            Name = name;
+            Price = price;
+            Turnover = turnover;
+            Diff = diff;
+        }
     }
 }
 
