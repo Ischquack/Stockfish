@@ -12,16 +12,13 @@ namespace Stockfish.DAL
         Task<bool> CheckUsername(User user);
         Task<bool> Login(string username, string password);
         Task<bool> RegisterUser(User user);
-        Task<List<Stock>> GetUserStocks(int userId);
-        Task<bool> BuyStock(Order order);
-        Task<bool> SellStock(Order order);
+        Task<List<Orders>> GetUserStocks(int userId);
+        Task<bool> BuyStock(int stockId, int quantity);
+        //Task<bool> SellStock(Order order);
         Task<bool> AddStock(Stock stock);
         Task<bool> UpdateStock(Stock stock);
-        Task<bool> DeleteStock(Stock stock);
-        Task<bool> GetStock(Stock stock);
-
+        Task<bool> DeleteStock(int stockId);
+        //Task<bool> GetStock(Stock stock);
     }
-
-
 }
 

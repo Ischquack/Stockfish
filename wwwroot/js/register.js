@@ -15,7 +15,9 @@ const register = () => {
         password: $("#inPassword").val()
     }
     if (noValidationIssues()) {
-        //$.post("/stocks/registerUser", () => window.location.href = "login.html");
-        window.location.href = "login.html";
+        $.post("/stock/RegisterUser", user, (ok) => {
+            window.location.href = "login.html"
+        });
+      
     }
 }

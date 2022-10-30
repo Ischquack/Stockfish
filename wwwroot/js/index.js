@@ -3,9 +3,24 @@
     $("#mySite").click(() => window.location.href = "mySite.html");
     $("#myStocks").click(() => window.location.href = "myStocks.html");
     $("#landing").click(() => window.location.href = "index.html");
+
 });
 
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
+
+const buyStock = (stockId) => {
+    let stockID = stockId;
+    let Quantity = $("#quantity" + stockId).val();
+    const url = "stock/buyStock?StockId=" + stockID + "&Quantity=" + Quantity;
+    $.post(url, ok => {
+        const json = $.parseJSON(ok.responseText);
+        $("#feedback").html(json.message);
+    })
+        .fail((jqXHR) => {
+            const json = $.parseJSON(jqXHR.responseText);
+            $("#purchase").html(json.message);
+        });      
+}
 
 const formatStocks = stockList => {
     let stockTable =
@@ -19,7 +34,7 @@ const formatStocks = stockList => {
         '</tr>';
 
     for (let stock of stockList) {
-        utskrift +=
+        stockTable +=
             '<tr>' +
             '<td>' + stock.name + '</td>' +
             '<td>' + stock.diff + '</td>' +
@@ -27,7 +42,7 @@ const formatStocks = stockList => {
             '<td>' + stock.price + '</td>' +
             '<td>' + stock.turnover + '</td>' +
             '<td> <input type="text" id="quantity' + stock.id + '"> </td>' +
-            '<td> <button id="buy' + stock.id + '"> </td>' +
+            '<td> <button onclick="buyStock('+stock.id+')">Buy</td>' +
             '</tr>';
     }
     stockTable += '</table>';

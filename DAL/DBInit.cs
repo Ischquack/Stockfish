@@ -12,10 +12,10 @@ namespace Stockfish.Model
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetService<StockContext>();
-
-                context.Database.EnsureDeleted();
-                context.Database.EnsureCreated();
-
+           
+                await context.Database.EnsureDeletedAsync();
+                await context.Database.EnsureCreatedAsync();
+        
                 var norwegian = new Stock ("Norwegian", 2, 250, -7000);
                 var orkla = new Stock ("Orkla", 145, 3000, -340);
                 var aaslieCasino = new Stock ("Åslie Casino", 355, 1600000, 16);
@@ -48,7 +48,7 @@ namespace Stockfish.Model
                 context.Stocks.Add(russland);
                 context.Stocks.Add(sleepyJoe);
 
-                context.SaveChanges();
+                await context.SaveChangesAsync();
             }
         }
     }

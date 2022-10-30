@@ -1,0 +1,52 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div id="allStocks"></div>
+    <div>
+        <label for="deleteStock">Delete stock using ID</label>
+        <button id="deleteStock"></button>
+    </div>
+    <button id="addAdmin"></button>
+    <button id="deleteAdmin"></button>
+    <h2>Please register:</h2>
+    <form class="form">
+        <div class="=form-group">
+            <label for="inStockId">ID</label>
+            <input type="text" class="form-control" id="inStockId">
+            <span id="wrongFirstName"></span>
+        </div>
+        <div class="=form-group">
+            <label for="inStockName">Name</label>
+            <input type="text" class="form-control" id="inStockName">
+            <span id="wrongSurname"></span>
+        </div>
+        <div class="=form-group">
+            <label for="inStockPrice">Price</label>
+            <input type="text" class="form-control" id="inStockPrice">
+            <span id="wrongAddress"></span>
+        </div>
+        <div class="=form-group">
+            <label for="inStockTurnover">Turnover</label>
+            <input type="text" class="form-control" id="inStockTurnover">
+            <span id="wrongPostalCode"></span>
+        </div>
+        <div class="=form-group">
+            <label for="inStockDiff">Difference</label>
+            <input type="text" class="form-control" id="inStockDiff">
+            <span id="wrongPostalOffice"></span>
+        </div>
+        <div class="form-group">
+            <input type="button" id="updateStock" class="btn-primary" value="Update" />
+        </div>
+        <div class="form-group">
+            <input type="button" id="addStock" class="btn-primary" value="Add" />
+        </div>
+    </form>
+    <div id="feedback"></div>
+
+</body>
+</html>

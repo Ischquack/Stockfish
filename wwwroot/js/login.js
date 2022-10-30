@@ -6,18 +6,16 @@
 
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
 
-const login = () {
-    username: $("#inUsername").val();
-    password: $("#inPassword").val();
-    const url = "stock/login?username=" + username + "?password=" + password;
-    $.post(url, (ok) {
+const login = () => {
+    let username = $("#inUsername").val();
+    let password = $("#inPassword").val();
+    const url = "stock/login?username=" + username + "&password=" + password;
+    $.post(url, (ok) => {
         if (ok) {
             window.location.href = "index.html";
         } else $("#wrongLogin").html("The username and password does not match");
-    }
-});
-
-const testekukken = 1; 
+    });
+}
 
 const formatStocks = stockList => {
     let stockTable =
@@ -30,7 +28,7 @@ const formatStocks = stockList => {
         '</tr>';
 
     for (let stock of stockList) {
-        utskrift +=
+        stockTable +=
             '<tr>' +
             '<td>' + stock.name + '</td>' +
             '<td>' + stock.diff + '</td>' +

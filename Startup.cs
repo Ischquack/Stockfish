@@ -11,8 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Stockfish.DAL;
 using Stockfish.Model;
-using Stockfish.DAL;
-using Stockfish.Model;
 
 namespace Stockfish
 {
@@ -40,11 +38,12 @@ namespace Stockfish
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
+            DBInit.init(app);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                loggerFactory.AddFile("Logs/StockfishLog.txt")
-                DBInit.init(app);
+                loggerFactory.AddFile("Logs/StockfishLog.txt");
+                //DBInit.init(app);
             }
 
             app.UseRouting();
