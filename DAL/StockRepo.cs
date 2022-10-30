@@ -167,7 +167,7 @@ namespace Stockfish.DAL
             csp.GetBytes(salt);
             return salt;
         }
-        public async Task<bool> login(string username, string password)
+        public async Task<bool> Login(string username, string password)
         {
             try
             {

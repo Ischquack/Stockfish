@@ -6,14 +6,18 @@
 
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
 
-const login = () => $.post("stock/login", (ok) {
-    if (ok) {
-        window.location.href = "index.html"
-    } else {
-        return
+const login = () {
+    username: $("#inUsername").val();
+    password: $("#inPassword").val();
+    const url = "stock/login?username=" + username + "?password=" + password;
+    $.post(url, (ok) {
+        if (ok) {
+            window.location.href = "index.html";
+        } else $("#wrongLogin").html("The username and password does not match");
     }
-    
 });
+
+const testekukken = 1; 
 
 const formatStocks = stockList => {
     let stockTable =
