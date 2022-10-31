@@ -48,7 +48,7 @@ const deleteStock = () => {
 const formatStocks = stockList => {
     let stockTable =
         '<table class="table"><tr>' +
-        '<th>ID</th>'
+        '<th>ID</th>' +
         '<th>Name</th>' +
         '<th>+/-</th>' +
         '<th>+/-%</th>' +

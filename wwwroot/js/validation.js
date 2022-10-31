@@ -96,21 +96,16 @@ const validateUsername = () => {
 
 const validatePassword = () => {
     const password = $("#inPassword").val();
-    const regexp = /^(?=.*[0-9])(?=.*[A-Za-zÆØÅæøå])[0-9a-zA-ZæøåÆØÅ. \-]{6,}$/;
+    const regexp = /^(?=.*[0-9])(?=.*[A-Za-zÆØÅæøå])[0-9a-zA-ZæøåÆØÅ. \-]{8,}$/;
     const ok = regexp.test((password));
     if (!ok) {
-        $("#wrongPassword").html("Must be at least 8 characters")
+        $("#wrongPassword").html("Must be at least 8 characters and include 1 number")
         return false;
     }
     else {
         $("#wrongPassword").html("");
         return true;
     }
-}
-
-const validateQuantity = (id) => {
-    const quantity = $("#quantity" + id).val();
-    if (!Number.isInteger(quantity) && !quantity > 0) $("#sellFeedback").html("Invalid quantity");
 }
 
 export { noValidationIssues } 

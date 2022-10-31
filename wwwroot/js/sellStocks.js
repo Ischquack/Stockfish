@@ -15,9 +15,9 @@ const sellStock = (stockId) => {
 
         $.post(url, (ok) => {
             if (ok) {
-                $("#sale").html("Your chosen stocks have been sold");
+                $("#sellFeedback" + stockId).html("Your stocks have been exchanged succesfully!");
                 getUserStocks();
-            } else $("#sale").html("Oops, something went wrong! Please try again later");
+            } else $("#sellFeedback" + stockId).html("Oops, something went wrong! Please try again later");
         });
     }
     
@@ -45,30 +45,29 @@ const formatStocks = stockList => {
             '<td>' + stock.turnover + '</td>' +
             '<td><b id=oldQuantity'+stock.id+'>' + stock.quantity + '<b></td>' +
             '<td> <input type="text" id="quantity' + stock.id + '"> </td>' +
-            '<td><em id="sellFeedback"></em><td>' +
+            '<td><em id="sellFeedback'+stock.id+'"></em><td>' +
             '<td> <button onclick="sellStock('+stock.id+')">Sell</td>' +
             '</tr>';
     }
     stockTable += '</table>';
-    //id = "oldQuantity'+stock.id+'
 
     $("#userStocks").html(stockTable);
 }
 
 const validateQuantity = (id) => {
-    const quantity = parseInt($("#quantity" + id).val());
-    const oldQuantity = parseInt($("#oldQuantity"+id).val());
+    const quantity = parseInt($("#quantity" + id).val());  
+    const oldQuantity = parseInt($("#oldQuantity"+id).text());
     console.log(oldQuantity);
     if (!Number.isInteger(quantity) || quantity < 0) {
-        $("#sellFeedback").html("Invalid quantity");
+        $("#sellFeedback"+id).html("Invalid quantity");
         return false;
     }
     else if (oldQuantity < quantity) {
-        $("#sellFeedback").html("You can't sell more stocks than you own!");
+        $("#sellFeedback"+id).html("You can't sell more stocks than you own!");
         return false;
     }
     else {
-        $("#sellFeedback").html("Your stocks have been exchanged succesfully!");
+        $("#quantity" + id).val("");
         return true;
     } 
 }
