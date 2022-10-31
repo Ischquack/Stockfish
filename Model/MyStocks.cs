@@ -1,5 +1,6 @@
 ﻿namespace Stockfish.Model
 {
+    /* Model class that matches  */
     public class MyStocks
     {
         public int Id { get; set; }

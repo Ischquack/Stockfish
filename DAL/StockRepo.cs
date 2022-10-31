@@ -13,13 +13,21 @@ using System.Globalization;
 
 namespace Stockfish.DAL
 {
+    /* This class contains methods that gets called on in StockController.
+     * It handles db queries, exception handling and overall logic for all
+     * client actions. 
+     * Every time a query to db is made, an exception is returned if the db
+     * was not able to perform the desired action. All queries are async to
+     * improve stability and performance.
+     */
     public class StockRepo : IStockRepo
     {
+        public static int _currentId;       /* Variable that holds the
+                                             current User ID */
 
-        public static int _currentId;
-
-        private readonly StockContext _db;
-        private ILogger<StockRepo> _log;
+        private readonly StockContext _db;  /* Gets access to read/write in
+                                             Stocks.db. */
+        private ILogger<StockRepo> _log;    
 
         public StockRepo(StockContext db, ILogger<StockRepo> log)
         {
@@ -41,6 +49,12 @@ namespace Stockfish.DAL
             }
         }
 
+        /* This method retrieves a User type (model) from the client and 
+         * makes a new Users object for inserting into db. It  also creates 
+         * a PostOffices instance to be inserted into the Users object to ensure
+         * correct insertion in db. 
+         * The password gets salted and hashed before inserting it in db.
+         */
         public async Task<bool> RegisterUser(User user)
         {
             try
@@ -69,15 +83,21 @@ namespace Stockfish.DAL
             }
         }
 
+        /* This method returns a list containing all stocks a spesific user
+         * owns. A spesific model class MyStocks.cs is created to represent this
+         * list as it differs slightly from the regular Orders type.
+         */
         public async Task<List<MyStocks>> GetUserStocks()
         {
             try
             {
-                _log.LogInformation("Inside of GetUserStocks");
                 List<Orders> orderList = new List<Orders>();
                 List<MyStocks> myStocks = new List<MyStocks>();
-                orderList = await _db.Orders.Where(o => o.User.Id == _currentId).ToListAsync();
-                _log.LogInformation("Created orderList");
+                // All stocks where Order.User.Id == the logged in user´s ID:
+                orderList = await _db.Orders.
+                    Where(o => o.User.Id == _currentId).ToListAsync();
+                /* Creates a list from orderList containing the information
+                 * about each different stock that the logged in user owns: */
                 var stockAttributes = orderList.DistinctBy(o => o.Stock.Id)
                     .Select(a => new
                     {
@@ -88,52 +108,27 @@ namespace Stockfish.DAL
                         Diff = a.Stock.Diff,
                         Quantity = 0
                     }).ToList();
-                _log.LogInformation("Created stockAttributes");
-                _log.LogInformation(stockAttributes.Count().ToString());
-                /*foreach (var order in stockAttributes)
-                {
-                    
-                    myStocks.Id = order.Id;
-                    myStocks.Name = order.Name;
-                    myStocks.Price = order.Price;
-                    newStock.Turnover = order.Turnover;
-                    newStock.Diff = order.Diff;
-                    newOrder.Stock = newStock;
-                    newOrder.Quantity = order.Quantity;
-
-                    _log.LogInformation("Name" + order.Name);
-                    _log.LogInformation("Price" + order.Price.ToString());
-                    _log.LogInformation("Turnover" + order.Turnover.ToString());
-                    _log.LogInformation("Diff" + order.Diff.ToString());
-                    myStocks.Add(newOrder);
-                }*/
+                /* Creates a list containing the total amount of each stock
+                 * that the logged in user owns: */ 
                 var quantity = orderList.GroupBy(s => s.Stock.Id)
                     .Select(g => new
                     { Quantity = g.Sum(q => q.Quantity)}).ToList();
-                _log.LogInformation("Created quantity");
-                _log.LogInformation(quantity.Count().ToString());
+
+                /* This loop inserts a new MyStocks instance into myStocks for 
+                 * each iteration and feeds the attributes that got stored in
+                 * the stockAttributes and quantity lists: */
                 for (int i = 0; i < quantity.Count(); i++)
                 {   
                     MyStocks myStock = new MyStocks();
-                    _log.LogInformation("Inside for loop");
-                    _log.LogInformation(stockAttributes[i].Name);
                     myStock.Id = stockAttributes[i].Id;
-                    _log.LogInformation("Id given");
                     myStock.Name = stockAttributes[i].Name;
-                    _log.LogInformation("Name given");
                     myStock.Price = stockAttributes[i].Price;
-                    _log.LogInformation("Price given");
                     myStock.Turnover = stockAttributes[i].Turnover;
-                    _log.LogInformation("Turnover given");
                     myStock.Diff = stockAttributes[i].Diff;
-                    _log.LogInformation("Diff given");
                     myStock.Quantity = quantity[i].Quantity;
-                    _log.LogInformation("Quantity given");
-                    myStocks.Add(myStock);
-                    _log.LogInformation("Name" + myStocks[i].Name);
-                    _log.LogInformation("Quantity"+ myStocks[i].Quantity.ToString());
-                    
+                    myStocks.Add(myStock);                    
                 }
+
                 return myStocks;
             }
             catch (Exception ex)
@@ -149,8 +144,11 @@ namespace Stockfish.DAL
             {
                 int current = _currentId;
                 Orders order = new Orders();
-                Stock stock = await _db.Stocks.FirstOrDefaultAsync(s => s.Id == stockId);
-                Users user = await _db.Users.FirstOrDefaultAsync(u => u.Id == current);
+                Stock stock = await _db.Stocks.
+                    FirstOrDefaultAsync(s => s.Id == stockId);
+                Users user = await _db.Users.
+                    FirstOrDefaultAsync(u => u.Id == current);
+
                 if (user != null && stock != null)
                 {
                     order.Stock = stock;
@@ -158,12 +156,7 @@ namespace Stockfish.DAL
                 }
                 order.Quantity = quantity;
                 order.Date = DateTime.Now;
-                _log.LogInformation(stockId.ToString());
-                _log.LogInformation(current.ToString());
-                _log.LogInformation(order.Date.ToString());
-                _log.LogInformation(order.Quantity.ToString());
-                //_log.LogInformation(order.User.Id.ToString());
-                //_log.LogInformation(order.Stock.Id.ToString());
+
                 _db.Orders.Add(order);
                 await _db.SaveChangesAsync();
                 return true;
@@ -174,18 +167,6 @@ namespace Stockfish.DAL
                 return false;
             }
         }
-
-        /*public Task<bool> SellStock(Order order)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                _log.LogInformation(ex.Message);
-            }
-        }*/
 
         public async Task<bool> AddStock(Stock stock)
         {
@@ -242,18 +223,6 @@ namespace Stockfish.DAL
                 return false;
             }
         }
-
-        /*public Task<bool> GetStock(Stock stock)
-        {
-            try
-            {
-
-            }
-            catch (Exception ex)
-            {
-                _log.LogInformation(ex.Message);
-            }
-        }*/
 
         public static byte[] CreateSalt()
         {

@@ -6,7 +6,9 @@ using Stockfish.Model;
 
 namespace Stockfish.DAL
 {
-    
+    /* To configure foreign key for Postal Code we have to create two new 
+     * classes Users and PostOffices:
+     */
     public class Users
     {
         [Key]
@@ -24,11 +26,16 @@ namespace Stockfish.DAL
     public class PostOffices
     {
         [Key]
-        [System.ComponentModel.DataAnnotations.Schema.DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [System.ComponentModel.DataAnnotations.Schema.
+            DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string? PostalCode { get; set; }
         public string? PostalOffice { get; set; }
     }
 
+    /* An order needs to contain information about which user and which stock
+     * that was involved. This is how we can get information about which stocks
+     * each user has bought (Used in the GetUserStocks method). 
+     */
     public class Orders
     {
         public int Id { get; set; }
@@ -40,22 +47,23 @@ namespace Stockfish.DAL
         virtual public Stock Stock { get; set; }
     }
 
-
-
-
+    // This class handles the creaton of the tables in Stocks.db. 
     public class StockContext : DbContext
     {
-        public StockContext(DbContextOptions<StockContext> options) : base(options)
+        public StockContext(DbContextOptions<StockContext>
+            options) : base(options)
         {
             Database.EnsureCreated();
         }
-
+        // The tables gets created here:
         public DbSet<Users> Users { get; set; }
         public DbSet<PostOffices> PostOffices { get; set; }
         public DbSet<Stock> Stocks { get; set; }
         public DbSet<Orders> Orders { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        // Activates Lazy Loading
+        protected override void OnConfiguring
+            (DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseLazyLoadingProxies();
         }

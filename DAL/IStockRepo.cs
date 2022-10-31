@@ -7,6 +7,7 @@ using Stockfish.DAL;
 
 namespace Stockfish.DAL
 {
+    // Interface that determines which methods that StockRepo has to implement
     public interface IStockRepo
     {
         Task<List<Stock>> GetAllStocks();
@@ -15,11 +16,9 @@ namespace Stockfish.DAL
         Task<bool> RegisterUser(User user);
         Task<List<MyStocks>> GetUserStocks();
         Task<bool> BuyStock(int stockId, int quantity);
-        //Task<bool> SellStock(Order order);
         Task<bool> AddStock(Stock stock);
         Task<bool> UpdateStock(Stock stock);
         Task<bool> DeleteStock(int stockId);
-        //Task<bool> GetStock(Stock stock);
     }
 }
 
