@@ -42,13 +42,15 @@ namespace Stockfish.Controllers
                 }
                 else
                 {
-                    return BadRequest("Oops, something went wrong! Please try again later");
+                    return BadRequest("Oops, something went wrong! " +
+                        "Please try again later");
                 }
 
             }
             else
             {
-                return BadRequest("Username already taken, please choose a different username");
+                return BadRequest("Username already taken, " +
+                    "please choose a different username");
             }
         }
 
@@ -84,13 +86,13 @@ namespace Stockfish.Controllers
             HttpContext.Session.SetString(_loggedIn, "");
         }
 
-        public async Task<ActionResult> BuyStock(int StockId, int Quantity)
+        public async Task<ActionResult> ExchangeStock(int StockId, int Quantity)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
             {
                 return Unauthorized();
             }
-            if (await _db.BuyStock(StockId, Quantity)) { return Ok("Stock succesfully purchased"); }
+            if (await _db.ExchangeStock(StockId, Quantity)) { return Ok("Stock succesfully purchased"); }
             else { return BadRequest("Something went wrong during purchase"); }
         }
 

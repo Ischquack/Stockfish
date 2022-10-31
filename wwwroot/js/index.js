@@ -12,7 +12,7 @@ const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks
 const buyStock = (stockId) => {
     let Quantity = $("#quantity" + stockId).val();
     if (validateQuantity(stockId)){
-        const url = "stock/buyStock?StockId=" + stockId + "&Quantity=" + Quantity;
+        const url = "stock/exchangeStock?StockId=" + stockId + "&Quantity=" + Quantity;
         $.post(url, ok => {
             $("#buyFeedback" + stockId).html("Stocks succesfully purchased!");
         });   

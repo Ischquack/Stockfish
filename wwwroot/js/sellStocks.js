@@ -11,7 +11,7 @@ const sellStock = (stockId) => {
     console.log(Quantity + " " + stockId);
     if (validateQuantity(stockId)) {
         Quantity = 0 - Quantity;
-        const url = "stock/BuyStock?StockId=" + stockID + "&Quantity=" + Quantity;
+        const url = "stock/exchangeStock?StockId=" + stockID + "&Quantity=" + Quantity;
 
         $.post(url, (ok) => {
             if (ok) {

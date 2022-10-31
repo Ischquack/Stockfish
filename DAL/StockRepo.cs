@@ -138,7 +138,7 @@ namespace Stockfish.DAL
             }
         }
 
-        public async Task<bool> BuyStock(int stockId, int quantity)
+        public async Task<bool> ExchangeStock(int stockId, int quantity)
         {
             try
             {
