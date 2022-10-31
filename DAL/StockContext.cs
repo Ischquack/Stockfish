@@ -47,7 +47,7 @@ namespace Stockfish.DAL
         virtual public Stock Stock { get; set; }
     }
 
-    // This class handles the creaton of the tables in Stocks.db. 
+    // This class handles the creation of the tables in Stocks.db. 
     public class StockContext : DbContext
     {
         public StockContext(DbContextOptions<StockContext>

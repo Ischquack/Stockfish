@@ -31,7 +31,7 @@ namespace Stockfish.Controllers
             return Ok(allStocks);
         }
 
-        // Register a  user in Users table in Stocks.db
+        // Registers a user in Users table in Stocks.db
         public async Task<ActionResult> RegisterUser(User user)
         {
             if (await _db.CheckUsername(user))  // If username exists in db
@@ -98,7 +98,7 @@ namespace Stockfish.Controllers
             else { return BadRequest("Something went wrong during exchange"); }
         }
 
-        /* An admin user can delete, uppdate and add stocks to Stocks table.
+        /* An admin user can delete, update and add stocks to Stocks table.
          The following three methods takes care  of  that.
         The DeleteStock-method deletes based on the Stock ID. The admin has all
         stocks listed in the html including the ID.
