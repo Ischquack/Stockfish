@@ -69,39 +69,72 @@ namespace Stockfish.DAL
             }
         }
 
-        public async Task<List<Orders>> GetUserStocks()
+        public async Task<List<MyStocks>> GetUserStocks()
         {
             try
             {
                 _log.LogInformation("Inside of GetUserStocks");
                 List<Orders> orderList = new List<Orders>();
-                List<Orders> myFucks = new List<Orders>();
+                List<MyStocks> myStocks = new List<MyStocks>();
                 orderList = await _db.Orders.Where(o => o.User.Id == _currentId).ToListAsync();
-                myFucks = await orderList.DistinctBy(o => o.Stock.Id).ToListAsync();
                 _log.LogInformation("Created orderList");
-                foreach (Orders order in orderList)
+                var stockAttributes = orderList.DistinctBy(o => o.Stock.Id)
+                    .Select(a => new
+                    {
+                        Id = a.Stock.Id,
+                        Name = a.Stock.Name,
+                        Price = a.Stock.Price,
+                        Turnover = a.Stock.Turnover,
+                        Diff = a.Stock.Diff,
+                        Quantity = 0
+                    }).ToList();
+                _log.LogInformation("Created stockAttributes");
+                _log.LogInformation(stockAttributes.Count().ToString());
+                /*foreach (var order in stockAttributes)
                 {
-                    _log.LogInformation("Name" + order.Stock.Name);
-                    _log.LogInformation("Quantity" + order.Quantity.ToString());
-                }
-                var myStocks = orderList.GroupBy(s => s.Stock.Id)
-                    .Select(g => new
-                    {   Stockname = g.Select(s => s.Stock.Name),
-                        Quantity = g.Sum(c => c.Quantity),
-                        Price = g.Select(p => p.Stock.Price), 
-                        Turnover = g.Select(t => t.Stock.Turnover),
-                        Diff = g.Select(d => d.Stock.Diff)
-                    });
-                _log.LogInformation("Created myStocks");
-                foreach (var order in myStocks)
-                {
-                    _log.LogInformation("Name"+order.Stockname);
-                    _log.LogInformation("Quantity"+order.Quantity.ToString());
+                    
+                    myStocks.Id = order.Id;
+                    myStocks.Name = order.Name;
+                    myStocks.Price = order.Price;
+                    newStock.Turnover = order.Turnover;
+                    newStock.Diff = order.Diff;
+                    newOrder.Stock = newStock;
+                    newOrder.Quantity = order.Quantity;
+
+                    _log.LogInformation("Name" + order.Name);
                     _log.LogInformation("Price" + order.Price.ToString());
                     _log.LogInformation("Turnover" + order.Turnover.ToString());
                     _log.LogInformation("Diff" + order.Diff.ToString());
+                    myStocks.Add(newOrder);
+                }*/
+                var quantity = orderList.GroupBy(s => s.Stock.Id)
+                    .Select(g => new
+                    { Quantity = g.Sum(q => q.Quantity)}).ToList();
+                _log.LogInformation("Created quantity");
+                _log.LogInformation(quantity.Count().ToString());
+                for (int i = 0; i < quantity.Count(); i++)
+                {   
+                    MyStocks myStock = new MyStocks();
+                    _log.LogInformation("Inside for loop");
+                    _log.LogInformation(stockAttributes[i].Name);
+                    myStock.Id = stockAttributes[i].Id;
+                    _log.LogInformation("Id given");
+                    myStock.Name = stockAttributes[i].Name;
+                    _log.LogInformation("Name given");
+                    myStock.Price = stockAttributes[i].Price;
+                    _log.LogInformation("Price given");
+                    myStock.Turnover = stockAttributes[i].Turnover;
+                    _log.LogInformation("Turnover given");
+                    myStock.Diff = stockAttributes[i].Diff;
+                    _log.LogInformation("Diff given");
+                    myStock.Quantity = quantity[i].Quantity;
+                    _log.LogInformation("Quantity given");
+                    myStocks.Add(myStock);
+                    _log.LogInformation("Name" + myStocks[i].Name);
+                    _log.LogInformation("Quantity"+ myStocks[i].Quantity.ToString());
+                    
                 }
-                return orderList;
+                return myStocks;
             }
             catch (Exception ex)
             {

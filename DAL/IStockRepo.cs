@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Stockfish.Model;
+using Stockfish.DAL;
 
 namespace Stockfish.DAL
 {
@@ -12,7 +13,7 @@ namespace Stockfish.DAL
         Task<bool> CheckUsername(User user);
         Task<int> Login(string username, string password);
         Task<bool> RegisterUser(User user);
-        Task<List<Orders>> GetUserStocks();
+        Task<List<MyStocks>> GetUserStocks();
         Task<bool> BuyStock(int stockId, int quantity);
         //Task<bool> SellStock(Order order);
         Task<bool> AddStock(Stock stock);

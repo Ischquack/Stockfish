@@ -130,7 +130,7 @@ namespace Stockfish.Controllers
 
         public async Task<ActionResult> GetUserStocks()
         {
-            List<Orders> myStocks = await _db.GetUserStocks();
+            List<MyStocks> myStocks = await _db.GetUserStocks();
             return Ok(myStocks);
         }
     }

@@ -23,7 +23,7 @@ const login = () => {
 
 const formatStocks = stockList => {
     let stockTable =
-        '<table><tr>' +
+        '<table class="table"><tr>' +
         '<th>Name</th>' +
         '<th>+/-</th>' +
         '<th>+/-%</th>' +
@@ -36,7 +36,7 @@ const formatStocks = stockList => {
             '<tr>' +
             '<td>' + stock.name + '</td>' +
             '<td>' + stock.diff + '</td>' +
-            '<td>' + stock.diffPer + '</td>' +
+            '<td>' + (stock.diff / (stock.price - stock.diff) * 100).toFixed(1) + '</td>' +
             '<td>' + stock.price + '</td>' +
             '<td>' + stock.turnover + '</td>' +
 

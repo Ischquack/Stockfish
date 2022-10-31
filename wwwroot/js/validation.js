@@ -40,10 +40,10 @@ const validateSurname = () => {
 
 const validateAddress = () => {
     const address = $("#inAddress").val();
-    const regexp = /^[0-9a-zA-ZæøåÆØÅ. \-]{2,30}$/;
+    const regexp = /^(?=.*[0-9])(?=.*[A-Za-zÆØÅæøå])[0-9a-zA-ZæøåÆØÅ ]{2,30}$/;
     const ok = regexp.test(address);
     if (!ok) {
-        $("#wrongAddress").html("Must only consist of letters and be between 2 and 30 letters");
+        $("#wrongAddress").html("Length must be between 2 and 30 characters and consist of a combination of letters and numbers");
         return false;
     }
     else {
@@ -99,7 +99,7 @@ const validatePassword = () => {
     const regexp = /^(?=.*[0-9])(?=.*[A-Za-zÆØÅæøå])[0-9a-zA-ZæøåÆØÅ. \-]{6,}$/;
     const ok = regexp.test((password));
     if (!ok) {
-        $("#wrongPassword").html("Must be at least 6 characters and include at least one letter and one number")
+        $("#wrongPassword").html("Must be at least 8 characters")
         return false;
     }
     else {
@@ -108,4 +108,9 @@ const validatePassword = () => {
     }
 }
 
-export { noValidationIssues }
+const validateQuantity = (id) => {
+    const quantity = $("#quantity" + id).val();
+    if (!Number.isInteger(quantity) && !quantity > 0) $("#sellFeedback").html("Invalid quantity");
+}
+
+export { noValidationIssues } 

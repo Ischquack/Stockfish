@@ -38,7 +38,7 @@ namespace Stockfish
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
         {
-            DBInit.init(app);
+            //DBInit.init(app);
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
