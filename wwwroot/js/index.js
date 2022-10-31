@@ -10,12 +10,11 @@ $(() => {
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
 
 const buyStock = (stockId) => {
-    let stockID = stockId;
     let Quantity = $("#quantity" + stockId).val();
     if (validateQuantity(stockId)){
-        const url = "stock/buyStock?StockId=" + stockID + "&Quantity=" + Quantity;
+        const url = "stock/buyStock?StockId=" + stockId + "&Quantity=" + Quantity;
         $.post(url, ok => {
-
+            $("#buyFeedback" + stockId).html("Stocks succesfully purchased!");
         });   
     }
     
@@ -41,7 +40,7 @@ const formatStocks = stockList => {
             '<td>' + stock.price + '</td>' +
             '<td>' + stock.turnover + '</td>' +
             '<td> <input type="text" id="quantity' + stock.id + '"> </td>' +
-            '<td><em id=buyFeedback></em></td>' +
+            '<td><em id="buyFeedback'+stock.id+'"></em></td>' +
             '<td> <button onclick="buyStock('+stock.id+')">Buy</td>' +
             '</tr>';
     }
@@ -55,12 +54,12 @@ const validateQuantity = (id) => {
     console.log(Number.isInteger(quantity));
     console.log(quantity);
     if (!Number.isInteger(quantity) || quantity < 0) {
-        $("#buyFeedback").html("Invalid quantity");
+        $("#buyFeedback"+id).html("Invalid quantity");
         return false;
     }
     else {
         console.log(quantity);
-        $("#buyFeedback").html("Stocks succesfully purchased!");
+        $("#quantity" + id).val("");
         return true;
     } 
 }
