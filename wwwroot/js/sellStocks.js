@@ -3,24 +3,26 @@
     getUserStocks();
 });
 
-const getUserStocks = () => $.get("stock/GetUserStocks", stockList => formatStocks(stockList));
+const getUserStocks = () => $.get("stock/GetUserStocks",
+    stockList => formatStocks(stockList));
 
 const sellStock = (stockId) => {
     let stockID = stockId;
     let Quantity = $("#quantity" + stockId).val();
-    console.log(Quantity + " " + stockId);
+
     if (validateQuantity(stockId)) {
-        Quantity = 0 - Quantity;
+        Quantity = 0 - Quantity;    // Negative number gets inserted in db
         const url = "stock/exchangeStock?StockId=" + stockID + "&Quantity=" + Quantity;
 
         $.post(url, (ok) => {
             if (ok) {
-                $("#sellFeedback" + stockId).html("Your stocks have been exchanged succesfully!");
+                $("#sellFeedback" + stockId).
+                    html("Your stocks have been exchanged succesfully!");
                 getUserStocks();
-            } else $("#sellFeedback" + stockId).html("Oops, something went wrong! Please try again later");
+            } else $("#sellFeedback" + stockId).
+                html("Oops, something went wrong! Please try again later");
         });
-    }
-    
+    } 
 }
 
 const formatStocks = stockList => {
@@ -54,10 +56,11 @@ const formatStocks = stockList => {
     $("#userStocks").html(stockTable);
 }
 
+// See index.js for detailed explanation. This method also ensures that a
+// user cannot sell more stocks than he owns. 
 const validateQuantity = (id) => {
     const quantity = parseInt($("#quantity" + id).val());  
     const oldQuantity = parseInt($("#oldQuantity"+id).text());
-    console.log(oldQuantity);
     if (!Number.isInteger(quantity) || quantity < 0) {
         $("#sellFeedback"+id).html("Invalid quantity");
         return false;

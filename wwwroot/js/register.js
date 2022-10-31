@@ -5,7 +5,7 @@ $(() => {
 });
 
 const register = () => {
-    const user = {
+    const user = {      // Creates object that can get sent to controller 
         firstname: $("#inFirstName").val(),
         surname: $("#inSurname").val(),
         address: $("#inAddress").val(),
@@ -14,7 +14,7 @@ const register = () => {
         username: $("#inUsername").val(),
         password: $("#inPassword").val()
     }
-    if (noValidationIssues()) {
+    if (noValidationIssues()) {     // If validation succeded, back to login
         $.post("/stock/RegisterUser", user, (ok) => {
             window.location.href = "login.html"
         });

@@ -1,4 +1,7 @@
-﻿$(() => {
+﻿// This file contains methods that only admins are allowed to execute. The admin
+// can add new stocks and update and delete existing ones.
+
+$(() => {
     getAllStocks();
     $("#addStock").click(() => addStock());
     $("#deleteStock").click(() => deleteStock());
@@ -20,8 +23,7 @@ const addStock = () => {
     
     $.post("/stock/AddStock", stock, ok => {
         getAllStocks();
-    });
-        
+    });       
 }
 
 const updateStock = () => {

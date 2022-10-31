@@ -1,6 +1,4 @@
-﻿//import { validateQuantity } from "./validation.js"
-
-$(() => {
+﻿$(() => {
     getAllStocks();    
     $("#sellStocks").click(() => window.location.href = "sellStocks.html");
     $("#landing").click(() => window.location.href = "index.html");
@@ -17,9 +15,14 @@ const buyStock = (stockId) => {
             $("#buyFeedback" + stockId).html("Stocks succesfully purchased!");
         });   
     }
-    
 }
 
+/* This method generates a list containing all stocks stored in the database
+ * as in login.js. But it also lets the user buy stocks by generating buttons
+ * and inputfields so that he can specify how many of each stock he wants to buy.
+ * This is done by generating IDs based on the current Stock ID in the for-
+ * loop.
+*/
 const formatStocks = stockList => {
     let stockTable =
         '<table class="table"><tr>' +
@@ -49,10 +52,10 @@ const formatStocks = stockList => {
     $("#stockTable").html(stockTable);
 }
 
+// Input validation for the quantity*id* input fields.
+// Checks if the user passed in an integer larger than 0.
 const validateQuantity = (id) => {
     const quantity = parseInt($("#quantity" + id).val());
-    console.log(Number.isInteger(quantity));
-    console.log(quantity);
     if (!Number.isInteger(quantity) || quantity < 0) {
         $("#buyFeedback"+id).html("Invalid quantity");
         return false;

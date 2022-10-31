@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Stockfish.Model
 {
+    // Model class for User containing the same regexes as validation.js.
     public class User
     {
-        
         public int Id { get; set; }
         [RegularExpression(@"^[a-zA-ZæøåÆØÅ. \-]{2,20}$")]
         public string Firstname { get; set; }

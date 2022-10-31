@@ -34,7 +34,7 @@ namespace Stockfish.Controllers
         // Register a  user in Users table in Stocks.db
         public async Task<ActionResult> RegisterUser(User user)
         {
-            if (await _db.CheckUsername(user))
+            if (await _db.CheckUsername(user))  // If username exists in db
             {
                 if (await _db.RegisterUser(user))
                 {
@@ -86,14 +86,16 @@ namespace Stockfish.Controllers
             HttpContext.Session.SetString(_loggedIn, "");
         }
 
+        // Method for buying and selling stocks.
         public async Task<ActionResult> ExchangeStock(int StockId, int Quantity)
         {
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
             {
                 return Unauthorized();
             }
-            if (await _db.ExchangeStock(StockId, Quantity)) { return Ok("Stock succesfully purchased"); }
-            else { return BadRequest("Something went wrong during purchase"); }
+            if (await _db.ExchangeStock(StockId, Quantity))
+            { return Ok("Exchange successfull"); }
+            else { return BadRequest("Something went wrong during exchange"); }
         }
 
         /* An admin user can delete, uppdate and add stocks to Stocks table.

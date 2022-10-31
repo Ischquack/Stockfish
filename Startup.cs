@@ -22,11 +22,14 @@ namespace Stockfish
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson(options =>
-                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+                    options.SerializerSettings.ReferenceLoopHandling =
+                    Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
             services.AddDbContext<StockContext>(options =>
                             options.UseSqlite("Data Source=Stocks.db"));
+
             services.AddScoped<IStockRepo, StockRepo>();
+            //
             services.AddSession(options =>
             {
                 options.Cookie.Name = ".AdventureWorks.Session";
@@ -37,8 +40,12 @@ namespace Stockfish
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,
+            ILoggerFactory loggerFactory)
         {
+            /* Important! DBInit needs to be commented out to delete and seed
+             * the database when the application launches.
+            */
             //DBInit.init(app);
             if (env.IsDevelopment())
             {

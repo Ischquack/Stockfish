@@ -1,6 +1,7 @@
 ﻿namespace Stockfish.Model
 {
-    /* Model class that matches  */
+    /* Model class that gets returned to a logged in user in sellStocks.html
+     The user gets information about which and how many stocks he owns. */
     public class MyStocks
     {
         public int Id { get; set; }

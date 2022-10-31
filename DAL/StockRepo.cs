@@ -142,10 +142,12 @@ namespace Stockfish.DAL
         {
             try
             {
-                int current = _currentId;
+                int current = _currentId;       // Logged in users´s id
                 Orders order = new Orders();
+                // Gets the correct stock based on stockId from client:
                 Stock stock = await _db.Stocks.
                     FirstOrDefaultAsync(s => s.Id == stockId);
+                // Gets  the correct user based on current
                 Users user = await _db.Users.
                     FirstOrDefaultAsync(u => u.Id == current);
 
@@ -157,7 +159,8 @@ namespace Stockfish.DAL
                 order.Quantity = quantity;
                 order.Date = DateTime.Now;
 
-                _db.Orders.Add(order);
+                _db.Orders.Add(order);      /* Adds the spesific order to the
+                                             * Orders table*/
                 await _db.SaveChangesAsync();
                 return true;
             }
@@ -224,6 +227,7 @@ namespace Stockfish.DAL
             }
         }
 
+        // Creates password salt.
         public static byte[] CreateSalt()
         {
             var csp = new RNGCryptoServiceProvider();
@@ -232,6 +236,7 @@ namespace Stockfish.DAL
             return salt;
         }
 
+        // Creates password hash. Used by registerUser and login methods
         public static byte[] createHash(string password, byte[] salt)
         {
             return KeyDerivation.Pbkdf2(
@@ -242,11 +247,13 @@ namespace Stockfish.DAL
             numBytesRequested: 32);
         }
 
+        // Checks if username exists. Gets called on from controller
         public async Task<bool> CheckUsername(User user)
         {
             try
             {
-                if (await _db.Users.Where(u => u.Username == user.Username).ToListAsync() != null) { return true; }
+                if (await _db.Users.Where(u => u.Username == user.Username).
+                    ToListAsync() != null) { return true; }
                 else { return false; }
             }
             catch (Exception ex)
@@ -260,14 +267,13 @@ namespace Stockfish.DAL
         {
             try
             {
-                Users user = await _db.Users.FirstOrDefaultAsync(u => u.Username == username);
+                Users user = await _db.Users.
+                    FirstOrDefaultAsync(u => u.Username == username);
                 byte[] hash = createHash(password, user.Salt);
-                bool ok = hash.SequenceEqual(user.Password);
+                bool ok = hash.SequenceEqual(user.Password);    // Check pswd
                 if (ok)
                 {
-                    _log.LogInformation(_currentId.ToString());
-                    _currentId = user.Id;
-                    _log.LogInformation("Rett etter currentId er satt for første gang" + _currentId.ToString());
+                    _currentId = user.Id;  // Updates to the logged in user´s ID
                     if (user.Admin == 1)
                     {
                         return 1;
@@ -280,8 +286,7 @@ namespace Stockfish.DAL
             {
                 _log.LogInformation(ex.Message);
                 return -1;
-            }
-            
+            } 
         }
     }
 }

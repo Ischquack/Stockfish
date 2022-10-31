@@ -1,4 +1,7 @@
-﻿const noValidationIssues = () => {
+﻿// File containing only validation methods.
+
+// Checks all inputfields in registration form
+const noValidationIssues = () => {
     let ok = true;
     if (!validateFirstName()) ok = false;
     if (!validateSurname()) ok = false;
