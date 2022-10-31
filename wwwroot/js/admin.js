@@ -5,7 +5,10 @@
     $("#updateStock").click(() => updateStock());
     $("#addAdmin").click(() => addAdmin());
     $("#deleteAdmin").click(() => deleteAdmin());
+    $("#logOut").click(() => logOut());
 });
+
+const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));
 
 const addStock = () => {
     const stock = {
@@ -14,16 +17,11 @@ const addStock = () => {
         turnover: $("#inStockTurnover").val(),
         diff: $("#inStockDiff").val()
     }
-    if (noValidationIssues()) {
-        $.post("/stocks/addStock", stock, ok => {
-            const json = $.parseJSON(ok.responseText);
-            $("#feedback").html(json.message);
-        })
-            .fail((jqXHR) => {
-                const json = $.parseJSON(jqXHR.responseText);
-                $("#feedback").html(json.message);
-            });    
-    }
+    
+    $.post("/stock/AddStock", stock, ok => {
+        getAllStocks();
+    });
+        
 }
 
 const updateStock = () => {
@@ -34,30 +32,18 @@ const updateStock = () => {
         turnover: $("#inStockTurnover").val(),
         diff: $("#inStockDiff").val()
     }
-    if (noValidationIssues()) {
-        $.post("/stocks/updateStock", stock, ok => {
-            const json = $.parseJSON(ok.responseText);
-            $("#feedback").html(json.message);
-        })
-            .fail((jqXHR) => {
-                const json = $.parseJSON(jqXHR.responseText);
-                $("#feedback").html(json.message);
-            });
-    }
+    
+    $.post("/stock/UpdateStock", stock, ok => {
+        getAllStocks();
+    });
 }
 
 const deleteStock = () => {
     let id = $("#inStockId").val();
-    $.post("/stocks/deleteStock?id=" + id, ok => {
-        const json = $.parseJSON(ok.responseText);
-        $("#feedback").html(json.message);
-    })
-        .fail((jqXHR) => {
-            const json = $.parseJSON(jqXHR.responseText);
-            $("#feedback").html(json.message);
-        });
+    $.post("/stock/DeleteStock?StockId=" + id, ok => {
+        getAllStocks();
+    });
 }
-
 
 const formatStocks = stockList => {
     let stockTable =
@@ -71,7 +57,7 @@ const formatStocks = stockList => {
         '</tr>';
 
     for (let stock of stockList) {
-        utskrift +=
+        stockTable +=
             '<tr>' +
             '<td>' + stock.id + '</td>' +
             '<td>' + stock.name + '</td>' +

@@ -18,6 +18,7 @@ namespace Stockfish.DAL
         public string? Username { get; set; }
         public byte[]? Password { get; set; }
         public byte[]? Salt { get; set; }
+        public int? Admin { get; set; }
     }
 
     public class PostOffices
@@ -34,9 +35,9 @@ namespace Stockfish.DAL
         public DateTime Date { get; set; }
         public int Quantity { get; set; }
 
-        public virtual Users User { get; set; }
+        virtual public Users User { get; set; }
 
-        public virtual Stock Stock { get; set; }
+        virtual public Stock Stock { get; set; }
     }
 
 

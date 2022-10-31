@@ -32,10 +32,6 @@ namespace Stockfish.Controllers
 
         public async Task<ActionResult> RegisterUser(User user)
         {
-            /*if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
-            {
-                return Unauthorized();
-            }*/
             if (await _db.CheckUsername(user))
             {
                 if (await _db.RegisterUser(user))
@@ -58,12 +54,15 @@ namespace Stockfish.Controllers
         {
             if (ModelState.IsValid) 
             {
-                if (await _db.Login(username, password))
+                if (await _db.Login(username, password) == 1)
                 {
                     HttpContext.Session.SetString(_loggedIn, "LoggedIn");
-                    return Ok("Succesfully logged in");
+                    return Ok(1);
                 }
-                else
+                else if (await _db.Login(username, password) == 0) {
+                    HttpContext.Session.SetString(_loggedIn, "LoggedIn");
+                    return Ok(0);
+                } else
                 {
                     _log.LogInformation("Login failed for user: " + username);
                     HttpContext.Session.SetString(_loggedIn, "");
@@ -72,6 +71,11 @@ namespace Stockfish.Controllers
             }
             _log.LogInformation("Inputvalidation unsuccesful");
             return BadRequest("Inputvalidation from server not succesful");   
+        }
+
+        public void LogOut()
+        {
+            HttpContext.Session.SetString(_loggedIn, "");
         }
 
         public async Task<ActionResult> BuyStock(int StockId, int Quantity)
@@ -86,6 +90,7 @@ namespace Stockfish.Controllers
 
         public async Task<ActionResult> DeleteStock(int StockId)
         {
+            _log.LogInformation("Controller " + StockId.ToString());
             if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
             {
                 return Unauthorized();
@@ -108,6 +113,25 @@ namespace Stockfish.Controllers
             {
                 return BadRequest("Unable to update stock");
             }
+        }
+
+        public async Task<ActionResult> AddStock(Stock stock)
+        {
+            if (string.IsNullOrEmpty(HttpContext.Session.GetString(_loggedIn)))
+            {
+                return Unauthorized();
+            }
+            if (await _db.AddStock(stock)) { return Ok("Stock succesfully added"); }
+            else
+            {
+                return BadRequest("Unable to add stock");
+            }
+        }
+
+        public async Task<ActionResult> GetUserStocks()
+        {
+            List<Orders> myStocks = await _db.GetUserStocks();
+            return Ok(myStocks);
         }
     }
 }

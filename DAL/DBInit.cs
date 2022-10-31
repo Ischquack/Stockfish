@@ -2,11 +2,22 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Stockfish.DAL;
+using Stockfish.Controllers;
+using Microsoft.AspNetCore.Cryptography.KeyDerivation;
+using Serilog;
+using System.Security.Cryptography;
 
 namespace Stockfish.Model
 {
     public class DBInit
     {
+        private readonly StockController _controller;
+
+        public DBInit(StockController controller)
+        {
+            _controller = controller;
+        }
+
         public static async void init(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -31,6 +42,50 @@ namespace Stockfish.Model
                 var kongsbergGruppen = new Stock("Kongsberg Gruppen", 9000, 1500000000000, 780);
                 var russland = new Stock("Russland", 0.01, 20000, -3400);
                 var sleepyJoe = new Stock("Joe Biden", 3700, 40000000, -370);
+
+                var quackAttack = new User { Firstname = "Quacken", Surname = "Attacken", Address = "Gølle", 
+                    PostalCode = "2918", PostalOffice = "Ulnes", Username = "Quacky", Password = "Ranheim123" };
+
+                static byte[] CreateSalt()
+                {
+                    var csp = new RNGCryptoServiceProvider();
+                    var salt = new byte[24];
+                    csp.GetBytes(salt);
+                    return salt;
+                }
+
+                byte[] salt = CreateSalt();
+
+                static byte[] createHash(string password, byte[] salt)
+                {
+                    return KeyDerivation.Pbkdf2(
+                                        password: password,
+                                        salt: salt,
+                                        prf: KeyDerivationPrf.HMACSHA512,
+                                        iterationCount: 1000,
+                    numBytesRequested: 32);
+                }
+
+                byte[] hash = createHash(quackAttack.Password, salt);
+
+                Users newAdmin = new Users();
+                var newPostOffice = new PostOffices();
+                newAdmin.Address = quackAttack.Address;
+                newAdmin.Firstname = quackAttack.Firstname;
+                newAdmin.Surname = quackAttack.Surname;
+                newPostOffice.PostalOffice = quackAttack.PostalOffice;
+                newPostOffice.PostalCode = quackAttack.PostalCode;
+                newAdmin.PostOffice = newPostOffice;
+                newAdmin.Username = quackAttack.Username;
+                newAdmin.Salt = salt;
+                newAdmin.Password = hash;
+                newAdmin.Admin = 1;
+                context.Add(newAdmin);
+                await context.SaveChangesAsync();
+               
+
+
+
 
                 context.Stocks.Add(norwegian);
                 context.Stocks.Add(orkla);

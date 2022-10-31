@@ -22,6 +22,8 @@ namespace Stockfish.Model
             Turnover = turnover;
             Diff = diff;
         }
+
+        public Stock() { }
     }
 }
 

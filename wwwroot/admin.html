@@ -2,16 +2,17 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Admin</title>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css">
+    <script src="js/admin.js"></script>
+    <script src="js/logOut.js"></script>
 </head>
 <body>
     <div id="allStocks"></div>
     <div>
-        <label for="deleteStock">Delete stock using ID</label>
-        <button id="deleteStock"></button>
+        
     </div>
-    <button id="addAdmin"></button>
-    <button id="deleteAdmin"></button>
     <h2>Please register:</h2>
     <form class="form">
         <div class="=form-group">
@@ -44,6 +45,12 @@
         </div>
         <div class="form-group">
             <input type="button" id="addStock" class="btn-primary" value="Add" />
+        </div>
+        <div class="form-group">
+            <input type="button" id="deleteStock" class="btn-danger" value="Delete stock using ID" />
+        </div>
+        <div class="form-group">
+            <input type="button" id="logOut" class="btn-primary" value="Log out" />
         </div>
     </form>
     <div id="feedback"></div>

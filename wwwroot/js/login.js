@@ -11,9 +11,13 @@ const login = () => {
     let password = $("#inPassword").val();
     const url = "stock/login?username=" + username + "&password=" + password;
     $.post(url, (ok) => {
-        if (ok) {
+        if (ok == 1) {
+            window.location.href = "admin.html";
+        } else if (ok == 0) {
             window.location.href = "index.html";
-        } else $("#wrongLogin").html("The username and password does not match");
+        } else {
+            $("#wrongLogin").html("The username and password does not match");
+        } 
     });
 }
 

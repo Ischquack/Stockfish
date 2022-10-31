@@ -1,9 +1,8 @@
 ﻿$(() => {
     getAllStocks();    
-    $("#mySite").click(() => window.location.href = "mySite.html");
-    $("#myStocks").click(() => window.location.href = "myStocks.html");
+    $("#sellStocks").click(() => window.location.href = "sellStocks.html");
     $("#landing").click(() => window.location.href = "index.html");
-
+    $("#logOut").click(() => logOut());
 });
 
 const getAllStocks = () => $.get("stock/getAllStocks", stockList => formatStocks(stockList));

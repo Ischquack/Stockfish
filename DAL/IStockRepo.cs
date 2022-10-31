@@ -10,9 +10,9 @@ namespace Stockfish.DAL
     {
         Task<List<Stock>> GetAllStocks();
         Task<bool> CheckUsername(User user);
-        Task<bool> Login(string username, string password);
+        Task<int> Login(string username, string password);
         Task<bool> RegisterUser(User user);
-        Task<List<Orders>> GetUserStocks(int userId);
+        Task<List<Orders>> GetUserStocks();
         Task<bool> BuyStock(int stockId, int quantity);
         //Task<bool> SellStock(Order order);
         Task<bool> AddStock(Stock stock);

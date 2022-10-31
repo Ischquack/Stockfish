@@ -5,15 +5,15 @@
 
 const getUserStocks = () => $.get("stock/GetUserStocks", stockList => formatStocks(stockList));
 
-const sellStock = (stockId) {
+const sellStock = (stockId) => {
     let stockID = stockId;
     let Quantity = $("#quantity" + stockId).val();
     const url = "stock/sellStock?StockId=" + stockID + "?Quantity=" + Quantity;
-    $.post(url, (ok) {
+    $.post(url, (ok) => {
         if (ok) {
-            $("#purchase").html("Your purchase has been succesful");
-        } else $("#purchase").html("Oops, something went wrong! Please try again later");
-    }
+            $("#sale").html("Your chosen stocks have been sold");
+        } else $("#sale").html("Oops, something went wrong! Please try again later");
+    });
 }
 
 const formatStocks = stockList => {
@@ -28,7 +28,7 @@ const formatStocks = stockList => {
         '</tr>';
 
     for (let stock of stockList) {
-        utskrift +=
+        stockTable +=
             '<tr>' +
             '<td>' + stock.name + '</td>' +
             '<td>' + stock.diff + '</td>' +
@@ -37,10 +37,10 @@ const formatStocks = stockList => {
             '<td>' + stock.turnover + '</td>' +
             '<td>' + order.quantity + '</td>' +
             '<td> <input type="text" id="quantity' + stock.id + '"> </td>' +
-            '<td> <button onclick="sellStock('stock.id')"> </td>' +
+            '<td> <button onclick="sellStock('+stock.id+')">Sell</td>' +
                 '</tr>';
     }
     stockTable += '</table>';
 
-    $("#stockTable").html(stockTable);
+    $("#userStocks").html(stockTable);
 }
